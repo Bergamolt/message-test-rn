@@ -13,9 +13,12 @@ export const MessageScreen = () => {
       ? setCounterSms(0)
       : setCounterSms(Math.ceil(message.length / counterChar));
 
-  const editCounterChar = (value) => {
-    if (value)
-    setCounterChar(value);
+  const editCountingChar = (value) => {
+    if (value === '0' || isNaN(value)) {
+      setCounterChar(60);
+    } else {
+      setCounterChar(value);
+    }
   };
 
   return (
@@ -32,13 +35,16 @@ export const MessageScreen = () => {
           style={styles.inputChar}
           keyboardType="numeric"
           defaultValue={`${counterChar}`}
-          onChangeText={(value) => editCounterChar(value)}
+          onChangeText={(value) => editCountingChar(value)}
+          onBlur={() =>
+            counterChar === '' ? setCounterChar(60) : setCounterChar
+          }
         />
-        <Text>символів</Text>
+        <Text style={styles.text}>символів</Text>
       </View>
       <Button smsCounting={smsCounting} />
       <View style={styles.block}>
-        <Text>Потрібно СМС</Text>
+        <Text style={styles.text}>Потрібно смс:</Text>
         <Text style={styles.counter}>{counterSms}</Text>
       </View>
     </View>
@@ -52,17 +58,22 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     padding: 5,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
   },
   inputChar: {
     padding: 10,
     borderColor: 'gray',
     borderWidth: 1,
     marginRight: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
   },
   view: {
     height: '100%',
     paddingTop: 60,
     paddingHorizontal: 20,
+    backgroundColor: '#2F2E41',
   },
   block: {
     flexDirection: 'row',
@@ -72,5 +83,10 @@ const styles = StyleSheet.create({
   counter: {
     fontWeight: '800',
     marginLeft: 10,
-  }
+    color: '#ffffff',
+    fontSize: 18,
+  },
+  text: {
+    color: '#ffffff',
+  },
 });
